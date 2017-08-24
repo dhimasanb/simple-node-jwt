@@ -19,7 +19,9 @@ mongoose.connect(config.database); // connect to database
 app.set('superSecret', config.secret); // secret variable
 
 // use body parser so we can get info from POST and/or URL parameters
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+    extended: false,
+}));
 app.use(bodyParser.json());
 
 // use morgan to log requests to the console
@@ -35,6 +37,24 @@ app.get('/', function(req, res) {
 
 // API ROUTES -------------------
 // we'll get to these in a second
+app.get('/setup', function(req, res) {
+    // create a sample user
+    let nick = new User({
+        name: 'Nick Cerminara',
+        password: 'password',
+        admin: true,
+    });
+
+    // save the sample user
+    nick.save(function(err) {
+        if (err) throw err;
+
+        console.log('User saved successfully');
+        res.json({
+            success: true,
+        });
+    });
+});
 
 // =======================
 // start the server ======
